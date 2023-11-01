@@ -6,7 +6,9 @@ Demonstrate my coding style using [React](https://react.dev/), [React Hooks](htt
 This project uses [React](https://react.dev/) and [React Hooks](https://react.dev/reference/react/hooks) to build web pages.
 ### UI tools
 This project uses [Material UI](https://mui.com/) to build well styled web pages with predefined React components that implement Google's Material Design.
-
+## Tests
+Manual test result please refer to the [wiki page](https://github.com/yfloveyq/jubo_diagnostic_frontend/wiki).
+![image](https://github.com/yfloveyq/jubo_diagnostic_frontend/assets/13744502/28987cd5-1acf-4a34-b709-8ab4d188ef71)
 
 # Getting Started with Create React App
 
