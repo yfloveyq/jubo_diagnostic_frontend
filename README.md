@@ -5,7 +5,7 @@ Demonstrate my coding style using [React](https://react.dev/), [React Hooks](htt
 ### JavaScript Library
 This project uses [React](https://react.dev/) and [React Hooks](https://react.dev/reference/react/hooks) to build web pages.
 ### UI tools
-This project uses [Material UI](https://mui.com/) to build well styled web pages with predefined React components that implements Google's Material Design.
+This project uses [Material UI](https://mui.com/) to build well styled web pages with predefined React components that implement Google's Material Design.
 
 
 # Getting Started with Create React App

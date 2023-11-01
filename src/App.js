@@ -8,6 +8,11 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 import Header from './Header'
 import PatientList from "./PatientList";
+import OrderListDialog from "./OrderListDialog";
+import {useEffect, useState} from "react";
+import OrderFormDialog from "./OrderFormDialog";
+import Snackbar from "@mui/material/Snackbar";
+import Notification from "./Notification";
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -17,45 +22,34 @@ const Item = styled(Paper)(({ theme }) => ({
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 
 function App() {
-    // Declare a new state variable, which we'll call "count"
-    const patients = [
-        {
-            "ID": "653f82718800782bdb4b6959",
-            "Name": "小剛",
-            "OrderList": [
-                "653fd8d2534827276d8de0b5",
-                "653fd905534827276d8de0b6"
-            ],
-            "Orders": [
-                {
-                    "ID": "653fd8d2534827276d8de0b5",
-                    "Message": "超過120請施打8u"
-                },
-                {
-                    "ID": "653fd905534827276d8de0b6",
-                    "Message": "低於80請施打7d"
+    const [action, setAction] = useState("新增");
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [formOpen, setFormOpen] = useState(false);
+    const [selectedPatient, setSelectedPatient] = useState(0);
+    const [orders, setOrders] = useState([]);
+    const [formOrder, setFormOrder] = useState({});
+    const [patients, setPatients] = useState([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    // Fetch patients using useEffect
+    useEffect(() => {
+        const fetchPatients = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/patients');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            ]
-        },
-        {
-            "ID": "653f82718800782bdb4b6958",
-            "Name": "小傑",
-            "OrderList": [
-                "653fd8d2534827276d8de0b5",
-                "653fd905534827276d8de0b6"
-            ],
-            "Orders": [
-                {
-                    "ID": "653fd8d2534827276d8de0b5",
-                    "Message": "遇到皮特變大傑"
-                },
-                {
-                    "ID": "653fd905534827276d8de0b6",
-                    "Message": "遇到猗牙很開心"
-                }
-            ]
-        }
-    ];
+                const data = await response.json();
+                setPatients(data); // Set the fetched patients in state
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchPatients();
+    }, []); // Empty dependency array to run this effect only once when the component mounts
+
+
     return (
         <div className="App">
             <Header></Header>
@@ -68,12 +62,15 @@ function App() {
                             display: 'grid',
                         }}
                     >
-                        <Item elevation="4">
-                            {PatientList(patients)}
+                        <Item elevation={4}>
+                            {PatientList(patients, setSelectedPatient, setOrders, setDialogOpen)}
                         </Item>
                     </Box>
                 </ThemeProvider>
             </Container>
+            {OrderListDialog(selectedPatient, patients, setPatients, orders, setOrders, setFormOrder, dialogOpen, setDialogOpen, setAction, setFormOpen, setSnackbarOpen)}
+            {OrderFormDialog(selectedPatient, patients, setPatients, formOrder, setFormOrder, setOrders, action, formOpen, setFormOpen, setSnackbarOpen)}
+            {Notification(snackbarOpen, setSnackbarOpen)}
         </div>
     );
 }
